@@ -16,7 +16,7 @@ BUILD_VERSION ?= $(shell git describe --tags $$(git rev-list --tags --max-count=
 LIBCRYPTO_VERSION ?= 3.3.3-r0
 
 # source controller version
-SOURCE_VER ?= v1.0.0-rc.1
+SOURCE_VER ?= v1.6.2
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 GOBIN=$(shell pwd)/bin
@@ -222,39 +222,40 @@ tools: kustomize protoc protoc-gen-go protoc-gen-go-grpc controller-gen envtest 
 KUSTOMIZE = $(shell pwd)/bin/kustomize
 .PHONY: kustomize
 kustomize: ## Download kustomize locally if necessary.
-	$(call go-install-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v4@v4.5.7)
+	$(call go-install-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize@v5)
 
 PROTOC = $(PROJECT_DIR)/protoc
 .PHONY: protoc
 protoc: ## Download protoc locally if necessary.
+	PROTOC ?= 3.29.5
 	# download and unzip protoc
 	mkdir -p $(PROJECT_DIR)
-	curl -qLO https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-linux-x86_64.zip
-	unzip -q -o protoc-3.19.4-linux-x86_64.zip bin/protoc -d $(PROJECT_DIR)
-	rm protoc-3.19.4-linux-x86_64.zip
+	curl -qLO https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOC)/protoc-$(PROTOC)-linux-x86_64.zip
+	unzip -q -o protoc-$(PROTOC)-linux-x86_64.zip bin/protoc -d $(PROJECT_DIR)
+	rm protoc-$(PROTOC)-linux-x86_64.zip
 
 # Find or download controller-gen
 PROTOC_GEN_GO = $(GOBIN)/protoc-gen-go
 .PHONY: protoc-gen-go
 protoc-gen-go: ## Download controller-gen locally if necessary.
-	$(call go-install-tool,$(PROTOC_GEN_GO),google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1)
+	$(call go-install-tool,$(PROTOC_GEN_GO),google.golang.org/protobuf/cmd/protoc-gen-go@v1)
 
 PROTOC_GEN_GO_GRPC = $(GOBIN)/protoc-gen-go-grpc
 .PHONY: protoc-gen-go-grpc
 protoc-gen-go-grpc: ## Download controller-gen locally if necessary.
-	$(call go-install-tool,$(PROTOC_GEN_GO_GRPC),google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2)
+	$(call go-install-tool,$(PROTOC_GEN_GO_GRPC),google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1)
 
 # Find or download controller-gen
 CONTROLLER_GEN = $(GOBIN)/controller-gen
 .PHONY: controller-gen
 controller-gen: ## Download controller-gen locally if necessary.
-	$(call go-install-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0.17.0)
+	$(call go-install-tool,$(CONTROLLER_GEN),sigs.k8s.io/controller-tools/cmd/controller-gen@v0)
 
 # Find or download gen-crd-api-reference-docs
 GEN_CRD_API_REFERENCE_DOCS = $(GOBIN)/gen-crd-api-reference-docs
 .PHONY: gen-crd-api-reference-docs
 gen-crd-api-reference-docs:
-	$(call go-install-tool,$(GEN_CRD_API_REFERENCE_DOCS),github.com/ahmetb/gen-crd-api-reference-docs@v0.3.0)
+	$(call go-install-tool,$(GEN_CRD_API_REFERENCE_DOCS),github.com/ahmetb/gen-crd-api-reference-docs@v0)
 
 ENVTEST_ARCH ?= amd64
 
@@ -268,7 +269,7 @@ install-envtest: setup-envtest
 ENVTEST = $(shell pwd)/bin/setup-envtest
 .PHONY: envtest
 setup-envtest: ## Download envtest-setup locally if necessary.
-	$(call go-install-tool,$(ENVTEST),sigs.k8s.io/controller-runtime/tools/setup-envtest@release-0.16)
+	$(call go-install-tool,$(ENVTEST),sigs.k8s.io/controller-runtime/tools/setup-envtest@latest)
 
 # go-install-tool will 'go install' any package $2 and install it to $1.
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
