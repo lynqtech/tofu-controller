@@ -2,7 +2,9 @@
 # Image URL to use all building/pushing image targets
 MANAGER_IMG ?= ghcr.io/flux-iac/tofu-controller
 RUNNER_IMG  ?= ghcr.io/flux-iac/tf-runner
+RUNNER_IMG_TOFU  ?= ghcr.io/flux-iac/tf-runner-tofu
 RUNNER_AZURE_IMAGE ?= ghcr.io/flux-iac/tf-runner-azure
+RUNNER_AZURE_IMAGE_TOFU ?= ghcr.io/flux-iac/tf-runner-azure-tofu
 BRANCH_PLANNER_IMAGE ?= ghcr.io/flux-iac/branch-planner
 TAG ?= latest
 BUILD_SHA ?= $(shell git rev-parse --short HEAD)
@@ -153,7 +155,9 @@ docker-build: ## Build docker
 	docker build -t ${MANAGER_IMG}:${TAG} --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${RUNNER_IMG}:${TAG}-base -f runner-base.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${RUNNER_IMG}:${TAG} -f runner.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
+	docker build -t ${RUNNER_IMG_TOFU}:${TAG} -f runner-tofu.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${RUNNER_AZURE_IMAGE}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
+	docker build -t ${RUNNER_AZURE_IMAGE_TOFU}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${BRANCH_PLANNER_IMAGE}:${TAG} -f planner.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 
 .PHONY: docker-buildx
@@ -161,7 +165,9 @@ docker-buildx: ## Build docker
 	docker buildx build --load -t ${MANAGER_IMG}:${TAG} --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} ${BUILD_ARGS} .
 	docker buildx build --load -t ${RUNNER_IMG}:${TAG}-base -f runner-base.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} ${BUILD_ARGS} .
 	docker buildx build --load -t ${RUNNER_IMG}:${TAG} -f runner.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base ${BUILD_ARGS} .
+	docker buildx build --load -t ${RUNNER_IMG_TOFU}:${TAG} -f runner-tofu.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker buildx build --load -t ${RUNNER_AZURE_IMAGE}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base ${BUILD_ARGS} .
+	docker buildx build --load -t ${RUNNER_AZURE_IMAGE_TOFU}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker buildx build --load -t ${BRANCH_PLANNER_IMAGE}:${TAG} -f planner.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} ${BUILD_ARGS} .
 
 .PHONY: docker-push
@@ -169,7 +175,9 @@ docker-push: ## Push docker image with the manager.
 	docker push ${MANAGER_IMG}:${TAG}
 	docker push ${RUNNER_IMG}:${TAG}-base
 	docker push ${RUNNER_IMG}:${TAG}
+	docker push ${RUNNER_IMG_TOFU}:${TAG}
 	docker push ${RUNNER_AZURE_IMAGE}:${TAG}
+	docker push ${RUNNER_AZURE_IMAGE_TOFU}:${TAG}
 	docker push ${BRANCH_PLANNER_IMAGE}:${TAG}
 
 docker-dev-runner:
