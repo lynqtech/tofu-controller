@@ -6,7 +6,7 @@ All notable changes of this project are documented in this file.
 
 **Release date:** to be determined
 
-This release updates core dependencies, improves internal tooling, and requires FluxCD 2.6.
+This release updates core dependencies, improves internal tooling, and requires FluxCD 2.6. We also added OpenTofu Dockerfiles.
 
 **BREAKING CHANGES**
 
@@ -21,6 +21,7 @@ This release updates core dependencies, improves internal tooling, and requires 
 - Bump FluxCD Source Controller to v1.6.2 (FluxCD v2.6); and drop support for Source Controller API `v1beta2`.
 - Fix `go generate` warning for cleaner build output.
 - Regenerate protobuf and CRDs to reflect dependency updates.
+- Provide Dockerfiles for OpenTofu as well 
 
 # v0.16.0-rc.5
 
