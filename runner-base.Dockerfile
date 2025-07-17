@@ -1,5 +1,5 @@
 # Build the manager binary
-FROM golang:1.23 as builder
+FROM golang:1.24 as builder
 
 ARG TARGETARCH
 ARG BUILD_SHA
@@ -38,7 +38,7 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=${TARGETARCH} \
         -o tf-runner \
         ./cmd/runner/main.go
 
-FROM alpine:3.21
+FROM alpine:3.22
 
 LABEL org.opencontainers.image.source="https://github.com/flux-iac/tofu-controller"
 

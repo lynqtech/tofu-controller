@@ -21,8 +21,7 @@ const (
 
 type URLParserFn = func(repoURL string, options ...ProviderOption) (Provider, Repository, error)
 
-//go:generate go run github.com/maxbrunsfeld/counterfeiter/v6 . Provider
-
+//counterfeiter:generate
 type Provider interface {
 	ListPullRequests(ctx context.Context, repo Repository) ([]PullRequest, error)
 	AddCommentToPullRequest(ctx context.Context, repo PullRequest, body []byte) (*Comment, error)
