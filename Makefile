@@ -28,7 +28,7 @@ SHELL = /usr/bin/env bash -o pipefail
 .SHELLFLAGS = -ec
 
 # Allows for defining additional Docker buildx arguments, e.g. '--push'.
-BUILD_ARGS ?=
+BUILD_ARGS ?= --build-arg BUILD_SHA=${BUILD_SHA} --build-arg BUILD_VERSION=${BUILD_VERSION}
 
 # Set architecture for the binaries we build as well as the terraform binary that get bundled in the images
 TARGETARCH ?= amd64
@@ -234,7 +234,7 @@ protoc: ## Download protoc locally if necessary.
 	unzip -q -o protoc-$(PROTOC_V)-linux-x86_64.zip bin/protoc -d $(PROJECT_DIR)
 	rm protoc-$(PROTOC_V)-linux-x86_64.zip
 
-# Find or download controller-gen
+# Find or download controller-gen - should be same version as `google.golang.org/protobuf`
 PROTOC_GEN_GO = $(GOBIN)/protoc-gen-go
 .PHONY: protoc-gen-go
 protoc-gen-go: ## Download controller-gen locally if necessary.
