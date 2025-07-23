@@ -18,11 +18,17 @@ to merge them for you after reviews.
 
 ## Protobuf Setup
 
-TF-controller requires a specific version of Protobuf compiler and its Go plugins.
+TF-controller requires a specific version of Protobuf compiler and its Go plugins. (see Makefile for details)
 
-* Protoc: version [3.19.4](https://github.com/protocolbuffers/protobuf/releases/download/v3.19.4/protoc-3.19.4-linux-x86_64.zip)
-* Go plugin: `go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.27.1`
-* Go plugin: `go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2`
+* Protoc: version [31.1](https://github.com/protocolbuffers/protobuf/releases/tag/v31.1)
+* Go plugin: `go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.6`
+* Go plugin: `go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.5.1`
+
+It is recommended to use the same versions of Go module and generator
+```text
+google.golang.org/protobuf v1.36.6
+protoc-gen-go v1.36.6
+```
 
 These can be installed by running `make tools`.
 
@@ -30,11 +36,11 @@ These can be installed by running `make tools`.
 
 Prerequisites:
 
-* go = 1.20.x
-* kubebuilder = 3.6.x
-* controller-gen = 0.15.x
-* kustomize = 4.x
-* kubectl >= 1.21
+* go = 1.24.x
+* kubebuilder = 4.x (eg. latest via brew)
+* controller-gen = 0.18.x
+* kustomize = 5.7.x
+* kubectl >= 1.32
 
 You can run the unit tests by simply doing
 
