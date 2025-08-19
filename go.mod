@@ -8,7 +8,10 @@ replace (
 	github.com/flux-iac/tofu-controller/tfctl => ./tfctl
 
 	// breaking changes in terraform-exec v0.18.0 - https://github.com/hashicorp/terraform-exec/blob/main/CHANGELOG.md#0180-february-20-2023
-	github.com/hashicorp/terraform-exec => github.com/hashicorp/terraform-exec v0.17.3
+	// github.com/hashicorp/terraform-exec => github.com/hashicorp/terraform-exec v0.17.3
+	// we use our fork, which patches latest upstream to include `ErrStateLocked` again
+	github.com/hashicorp/terraform-exec => github.com/lynqtech/terraform-exec v0.0.0-20250819072914-7ae1456d3527
+
 	// indirect - breaking changes in v1.0.x
 	github.com/olekukonko/tablewriter => github.com/olekukonko/tablewriter v0.0.5
 
@@ -39,7 +42,7 @@ require (
 	github.com/hashicorp/go-retryablehttp v0.7.8
 	github.com/hashicorp/hcl/v2 v2.24.0
 	github.com/hashicorp/terraform-exec v0.23.0
-	github.com/hashicorp/terraform-json v0.25.0
+	github.com/hashicorp/terraform-json v0.26.0
 	github.com/jenkins-x/go-scm v1.15.1
 	github.com/kubescape/go-git-url v0.0.30
 	github.com/maxbrunsfeld/counterfeiter/v6 v6.11.3
