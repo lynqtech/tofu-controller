@@ -10,7 +10,7 @@ replace (
 	// breaking changes in terraform-exec v0.18.0 - https://github.com/hashicorp/terraform-exec/blob/main/CHANGELOG.md#0180-february-20-2023
 	// github.com/hashicorp/terraform-exec => github.com/hashicorp/terraform-exec v0.17.3
 	// we use our fork, which patches latest upstream to include `ErrStateLocked` again
-	github.com/hashicorp/terraform-exec => github.com/lynqtech/terraform-exec v0.0.0-20250819072914-7ae1456d3527
+	github.com/hashicorp/terraform-exec => github.com/lynqtech/terraform-exec v0.0.0-20250827080156-bc4eedf29f9b
 
 	// indirect - breaking changes in v1.0.x
 	github.com/olekukonko/tablewriter => github.com/olekukonko/tablewriter v0.0.5
@@ -52,7 +52,7 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/spf13/viper v1.20.1
 	github.com/stretchr/testify v1.10.0
-	github.com/zclconf/go-cty v1.16.3
+	github.com/zclconf/go-cty v1.16.4
 	golang.org/x/net v0.42.0
 	google.golang.org/grpc v1.73.0
 	google.golang.org/protobuf v1.36.6
