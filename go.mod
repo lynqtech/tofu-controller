@@ -10,7 +10,7 @@ replace (
 	// breaking changes in terraform-exec v0.18.0 - https://github.com/hashicorp/terraform-exec/blob/main/CHANGELOG.md#0180-february-20-2023
 	// github.com/hashicorp/terraform-exec => github.com/hashicorp/terraform-exec v0.17.3
 	// we use our fork, which patches latest upstream to include `ErrStateLocked` again
-	github.com/hashicorp/terraform-exec => github.com/lynqtech/terraform-exec v0.0.0-20250827080156-bc4eedf29f9b
+	github.com/hashicorp/terraform-exec => github.com/lynqtech/terraform-exec v0.23.1
 
 	// indirect - breaking changes in v1.0.x
 	github.com/olekukonko/tablewriter => github.com/olekukonko/tablewriter v0.0.5

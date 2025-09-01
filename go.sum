@@ -297,6 +297,8 @@ github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de h1:9TO3cAIGXtEhn
 github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de/go.mod h1:zAbeS9B/r2mtpb6U+EI2rYA5OAXxsYw6wTamcNW+zcE=
 github.com/lynqtech/terraform-exec v0.0.0-20250827080156-bc4eedf29f9b h1:U6UkuOfc8vFlE91tHiPrr8C3W9CGLt80PIacV6m3xFs=
 github.com/lynqtech/terraform-exec v0.0.0-20250827080156-bc4eedf29f9b/go.mod h1:e4ZEg9BJDRaSalGm2z8vvrPONt0XWG0/tXpmzYTf+dM=
+github.com/lynqtech/terraform-exec v0.23.1 h1:GgtcDDhG8afYtq3SUKbG/ymDUjYFFeKDpueNXRXHhLM=
+github.com/lynqtech/terraform-exec v0.23.1/go.mod h1:e4ZEg9BJDRaSalGm2z8vvrPONt0XWG0/tXpmzYTf+dM=
 github.com/mailru/easyjson v0.9.0 h1:PrnmzHw7262yW8sTBwxi1PdJA3Iw/EKBa8psRf7d9a4=
 github.com/mailru/easyjson v0.9.0/go.mod h1:1+xMtQp2MRNVL/V1bOzuP3aP8VNwRW55fQUto+XFtTU=
 github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
