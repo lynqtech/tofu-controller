@@ -1,12 +1,8 @@
 module github.com/flux-iac/tofu-controller/tfctl
 
-go 1.24.0
+go 1.24.5
 
-replace (
-	github.com/flux-iac/tofu-controller/api => ../api
-	// breaking changes in v1.0.x
-	github.com/olekukonko/tablewriter => github.com/olekukonko/tablewriter v0.0.5
-)
+replace github.com/flux-iac/tofu-controller/api => ../api
 
 require (
 	github.com/flux-iac/tofu-controller/api v0.0.0-20250321074822-67198a27f35b
@@ -17,7 +13,7 @@ require (
 	github.com/hashicorp/go-version v1.7.0
 	github.com/hashicorp/hc-install v0.9.2
 	github.com/olekukonko/tablewriter v1.0.8
-	github.com/onsi/gomega v1.37.0
+	github.com/onsi/gomega v1.38.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/viper v1.20.1
 	github.com/theckman/yacspin v0.13.12
@@ -116,3 +112,7 @@ require (
 	sigs.k8s.io/structured-merge-diff/v4 v4.7.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v6 v6.2.0 // indirect
 )
+
+// Pin olekukonko/tablewriter to v0.0.5
+// breaking changes in v1.0.x
+replace github.com/olekukonko/tablewriter => github.com/olekukonko/tablewriter v0.0.5

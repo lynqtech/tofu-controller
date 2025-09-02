@@ -1,23 +1,9 @@
 module github.com/flux-iac/tofu-controller
 
-go 1.24.0
+go 1.24.5
 
-replace (
-	// our own stuff
-	github.com/flux-iac/tofu-controller/api => ./api
-	github.com/flux-iac/tofu-controller/tfctl => ./tfctl
-
-	// breaking changes in terraform-exec v0.18.0 - https://github.com/hashicorp/terraform-exec/blob/main/CHANGELOG.md#0180-february-20-2023
-	// github.com/hashicorp/terraform-exec => github.com/hashicorp/terraform-exec v0.17.3
-	// we use our fork, which patches latest upstream to include `ErrStateLocked` again
-	github.com/hashicorp/terraform-exec => github.com/lynqtech/terraform-exec v0.23.1
-
-	// indirect - breaking changes in v1.0.x
-	github.com/olekukonko/tablewriter => github.com/olekukonko/tablewriter v0.0.5
-
-	// until k8s.io/apimachinery supports sigs.k8s.io/structured-merge-diff/v6, we have to pin kube-openapi
-	k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250627150254-e9823e99808e
-)
+replace github.com/flux-iac/tofu-controller/api => ./api
+replace github.com/flux-iac/tofu-controller/tfctl => ./tfctl
 
 require (
 	github.com/Masterminds/sprig/v3 v3.3.0
@@ -79,6 +65,8 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
+	github.com/agext/levenshtein v1.2.3 // indirect
+	github.com/apparentlymart/go-textseg v1.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.11 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.32 // indirect
@@ -125,7 +113,7 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/davidmz/go-pageant v1.0.2 // indirect
 	github.com/distribution/reference v0.6.0 // indirect
-	github.com/docker/docker v28.3.2+incompatible // indirect
+	github.com/docker/docker v28.3.3+incompatible // indirect
 	github.com/docker/go-connections v0.5.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.2 // indirect
@@ -231,4 +219,16 @@ require (
 	sigs.k8s.io/randfill v1.0.0 // indirect
 	sigs.k8s.io/structured-merge-diff/v4 v4.7.0 // indirect
 	sigs.k8s.io/yaml v1.5.0 // indirect
+)
+replace (
+	// breaking changes in terraform-exec v0.18.0 - https://github.com/hashicorp/terraform-exec/blob/main/CHANGELOG.md#0180-february-20-2023
+	// github.com/hashicorp/terraform-exec => github.com/hashicorp/terraform-exec v0.17.3
+	// we use our fork, which patches latest upstream to include `ErrStateLocked` again
+	github.com/hashicorp/terraform-exec => github.com/lynqtech/terraform-exec v0.23.1
+
+	// indirect - breaking changes in v1.0.x
+	github.com/olekukonko/tablewriter => github.com/olekukonko/tablewriter v0.0.5
+
+	// until k8s.io/apimachinery supports sigs.k8s.io/structured-merge-diff/v6, we have to pin kube-openapi
+	k8s.io/kube-openapi => k8s.io/kube-openapi v0.0.0-20250627150254-e9823e99808e
 )

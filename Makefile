@@ -115,7 +115,7 @@ test-internal: manifests generate download-crd-deps fmt vet envtest api-docs ## 
 	$(TEST_SETTINGS) go test ./internal/... -coverprofile cover.out -v
 
 .PHONY: gen-grpc
-gen-grpc: protoc protoc-gen-go protoc-gen-go-grpc
+gen-grpc:
 	env PATH=$(shell pwd)/bin:$$PATH $(PROJECT_DIR)/bin/protoc --go_out=. --go_opt=Mrunner/runner.proto=runner/ --go-grpc_out=. --go-grpc_opt=Mrunner/runner.proto=runner/ runner/runner.proto
 
 ##@ Build
@@ -155,9 +155,7 @@ docker-build: ## Build docker
 	docker build -t ${MANAGER_IMG}:${TAG} --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${RUNNER_IMG}:${TAG}-base -f runner-base.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${RUNNER_IMG}:${TAG} -f runner.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
-	docker build -t ${RUNNER_IMG_TOFU}:${TAG} -f runner-tofu.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${RUNNER_AZURE_IMAGE}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
-	docker build -t ${RUNNER_AZURE_IMAGE_TOFU}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker build -t ${BRANCH_PLANNER_IMAGE}:${TAG} -f planner.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 
 .PHONY: docker-buildx
@@ -165,9 +163,7 @@ docker-buildx: ## Build docker
 	docker buildx build --load -t ${MANAGER_IMG}:${TAG} --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} ${BUILD_ARGS} .
 	docker buildx build --load -t ${RUNNER_IMG}:${TAG}-base -f runner-base.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} ${BUILD_ARGS} .
 	docker buildx build --load -t ${RUNNER_IMG}:${TAG} -f runner.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base ${BUILD_ARGS} .
-	docker buildx build --load -t ${RUNNER_IMG_TOFU}:${TAG} -f runner-tofu.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker buildx build --load -t ${RUNNER_AZURE_IMAGE}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base ${BUILD_ARGS} .
-	docker buildx build --load -t ${RUNNER_AZURE_IMAGE_TOFU}:${TAG} -f runner-azure.Dockerfile --build-arg BASE_IMAGE=${RUNNER_IMG}:${TAG}-base --build-arg TARGETARCH=${TARGETARCH} ${BUILD_ARGS} .
 	docker buildx build --load -t ${BRANCH_PLANNER_IMAGE}:${TAG} -f planner.Dockerfile --build-arg LIBCRYPTO_VERSION=${LIBCRYPTO_VERSION} ${BUILD_ARGS} .
 
 .PHONY: docker-push
@@ -175,9 +171,7 @@ docker-push: ## Push docker image with the manager.
 	docker push ${MANAGER_IMG}:${TAG}
 	docker push ${RUNNER_IMG}:${TAG}-base
 	docker push ${RUNNER_IMG}:${TAG}
-	docker push ${RUNNER_IMG_TOFU}:${TAG}
 	docker push ${RUNNER_AZURE_IMAGE}:${TAG}
-	docker push ${RUNNER_AZURE_IMAGE_TOFU}:${TAG}
 	docker push ${BRANCH_PLANNER_IMAGE}:${TAG}
 
 docker-dev-runner:
@@ -230,7 +224,7 @@ tools: kustomize protoc protoc-gen-go protoc-gen-go-grpc controller-gen envtest 
 KUSTOMIZE = $(shell pwd)/bin/kustomize
 .PHONY: kustomize
 kustomize: ## Download kustomize locally if necessary.
-	$(call go-install-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize@v5.7.0)
+	$(call go-install-tool,$(KUSTOMIZE),sigs.k8s.io/kustomize/kustomize/v5@v5.7.1)
 
 PROTOC = $(PROJECT_DIR)/protoc
 PROTOC_V ?= 31.1
