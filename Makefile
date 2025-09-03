@@ -98,7 +98,7 @@ download-crd-deps:
 TEST_SETTINGS=INSECURE_LOCAL_RUNNER=1 DISABLE_K8S_LOGS=1 DISABLE_TF_LOGS=1 DISABLE_TF_K8S_BACKEND=1 DISABLE_WEBHOOK_TLS_VERIFY=1 KUBEBUILDER_ASSETS="$(shell $(ENVTEST) --arch=$(ENVTEST_ARCH) use -i $(ENVTEST_KUBERNETES_VERSION) --bin-dir=$(ENVTEST_ASSETS_DIR) -p path)"
 
 .PHONY: test
-test: manifests generate download-crd-deps fmt vet envtest api-docs ## Run tests.
+test: manifests generate download-crd-deps fmt vet tools envtest api-docs ## Run tests.
 	$(TEST_SETTINGS) go test ./controllers -coverprofile cover.out -v
 
 # usage: make TARGET=250 target-test
@@ -270,6 +270,7 @@ install-envtest: setup-envtest
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST = $(shell pwd)/bin/setup-envtest
 .PHONY: envtest
+envtest: setup-envtest
 setup-envtest: ## Download envtest-setup locally if necessary.
 	$(call go-install-tool,$(ENVTEST),sigs.k8s.io/controller-runtime/tools/setup-envtest@release-0.21)
 
