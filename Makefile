@@ -2,7 +2,9 @@
 # Image URL to use all building/pushing image targets
 MANAGER_IMG ?= ghcr.io/flux-iac/tofu-controller
 RUNNER_IMG  ?= ghcr.io/flux-iac/tf-runner
+RUNNER_IMG_TOFU  ?= ghcr.io/flux-iac/tf-runner-tofu
 RUNNER_AZURE_IMAGE ?= ghcr.io/flux-iac/tf-runner-azure
+RUNNER_AZURE_IMAGE_TOFU ?= ghcr.io/flux-iac/tf-runner-azure-tofu
 BRANCH_PLANNER_IMAGE ?= ghcr.io/flux-iac/branch-planner
 TAG ?= latest
 BUILD_SHA ?= $(shell git rev-parse --short HEAD)
@@ -16,7 +18,7 @@ BUILD_VERSION ?= $(shell git describe --tags $$(git rev-list --tags --max-count=
 LIBCRYPTO_VERSION ?= 3.5.1-r0
 
 # source controller version
-SOURCE_VER ?= v1.0.0-rc.1
+SOURCE_VER ?= v1.6.2
 
 # Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
 GOBIN=$(shell pwd)/bin
@@ -28,7 +30,7 @@ SHELL = /usr/bin/env bash -o pipefail
 .SHELLFLAGS = -ec
 
 # Allows for defining additional Docker buildx arguments, e.g. '--push'.
-BUILD_ARGS ?=
+BUILD_ARGS ?= --build-arg BUILD_SHA=${BUILD_SHA} --build-arg BUILD_VERSION=${BUILD_VERSION}
 
 # Set architecture for the binaries we build as well as the terraform binary that get bundled in the images
 TARGETARCH ?= amd64
@@ -96,7 +98,7 @@ download-crd-deps:
 TEST_SETTINGS=INSECURE_LOCAL_RUNNER=1 DISABLE_K8S_LOGS=1 DISABLE_TF_LOGS=1 DISABLE_TF_K8S_BACKEND=1 DISABLE_WEBHOOK_TLS_VERIFY=1 KUBEBUILDER_ASSETS="$(shell $(ENVTEST) --arch=$(ENVTEST_ARCH) use -i $(ENVTEST_KUBERNETES_VERSION) --bin-dir=$(ENVTEST_ASSETS_DIR) -p path)"
 
 .PHONY: test
-test: manifests generate download-crd-deps fmt vet envtest api-docs ## Run tests.
+test: manifests generate download-crd-deps fmt vet tools envtest api-docs ## Run tests.
 	$(TEST_SETTINGS) go test ./controllers -coverprofile cover.out -v
 
 # usage: make TARGET=250 target-test
@@ -113,7 +115,7 @@ test-internal: manifests generate download-crd-deps fmt vet envtest api-docs ## 
 	$(TEST_SETTINGS) go test ./internal/... -coverprofile cover.out -v
 
 .PHONY: gen-grpc
-gen-grpc: protoc protoc-gen-go protoc-gen-go-grpc
+gen-grpc:
 	env PATH=$(shell pwd)/bin:$$PATH $(PROJECT_DIR)/bin/protoc --go_out=. --go_opt=Mrunner/runner.proto=runner/ --go-grpc_out=. --go-grpc_opt=Mrunner/runner.proto=runner/ runner/runner.proto
 
 ##@ Build
@@ -234,11 +236,11 @@ protoc: ## Download protoc locally if necessary.
 	unzip -q -o protoc-$(PROTOC_V)-linux-x86_64.zip bin/protoc -d $(PROJECT_DIR)
 	rm protoc-$(PROTOC_V)-linux-x86_64.zip
 
-# Find or download controller-gen
+# Find or download controller-gen - should be same version as `google.golang.org/protobuf`
 PROTOC_GEN_GO = $(GOBIN)/protoc-gen-go
 .PHONY: protoc-gen-go
 protoc-gen-go: ## Download controller-gen locally if necessary.
-	$(call go-install-tool,$(PROTOC_GEN_GO),google.golang.org/protobuf/cmd/protoc-gen-go@1.36.6)
+	$(call go-install-tool,$(PROTOC_GEN_GO),google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.6)
 
 PROTOC_GEN_GO_GRPC = $(GOBIN)/protoc-gen-go-grpc
 .PHONY: protoc-gen-go-grpc
@@ -268,6 +270,7 @@ install-envtest: setup-envtest
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST = $(shell pwd)/bin/setup-envtest
 .PHONY: envtest
+envtest: setup-envtest
 setup-envtest: ## Download envtest-setup locally if necessary.
 	$(call go-install-tool,$(ENVTEST),sigs.k8s.io/controller-runtime/tools/setup-envtest@release-0.21)
 

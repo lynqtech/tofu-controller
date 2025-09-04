@@ -2,6 +2,27 @@
 
 All notable changes of this project are documented in this file.
 
+# v1.2.0 - Lynqtech fork
+
+**Release date:** to be determined
+
+This release updates core dependencies, improves internal tooling, and requires FluxCD 2.6. We also added OpenTofu Dockerfiles.
+
+**BREAKING CHANGES**
+
+- Requires FluxCD 2.6 (Source Controller v1.6.2) as `OCIRepository` and `Bucket` API got promoted to `v1` and is required for the controller to work.
+
+**Notable Changes**
+
+- Upgrade Go version to 1.24 and update related dependencies - some hard dependencies exists and are pinned in [go.mod](go.mod).
+  - used https://github.com/flux-iac/tofu-controller/pull/1527 
+- Upgrade build tooling (see Makefile)
+- Bump Alpine base image to 3.22 and libcrypto to v3.5.1-r0; update Azure runner Dockerfile.
+- Bump FluxCD Source Controller to v1.6.2 (FluxCD v2.6); and drop support for Source Controller API `v1beta2`.
+- Fix `go generate` warning for cleaner build output.
+- Regenerate protobuf and CRDs to reflect dependency updates.
+- Provide Dockerfiles for OpenTofu as well 
+
 # v0.16.0-rc.5
 
 **Release date:** 2025-01-14
